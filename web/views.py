@@ -77,3 +77,4 @@ def kind_of_sport_delete(request, id):
     sport = KindOfSport.objects.get(id=id)
     sport.delete()
     return redirect('kind_of_sport')
+
