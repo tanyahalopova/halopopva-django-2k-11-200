@@ -3,7 +3,6 @@ from django.db import models
 
 User = get_user_model()
 
-
 class KindOfSport(models.Model):
     title = models.CharField(max_length=256)
     description = models.CharField(max_length=256)
