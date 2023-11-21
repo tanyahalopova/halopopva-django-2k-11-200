@@ -1,6 +1,6 @@
 from django.urls import path
 
-from web.view import main_view, registration_view, auth_view, logout_view, inventory_edit_view, kind_of_sport_view, \
+from web.views import main_view, registration_view, auth_view, logout_view, inventory_edit_view, kind_of_sport_view, \
     kind_of_sport_delete
 
 urlpatterns = [
