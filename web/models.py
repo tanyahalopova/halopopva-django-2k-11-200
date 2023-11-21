@@ -4,7 +4,7 @@ from django.db import models
 User = get_user_model()
 
 
-class Kind_of_sport(models.Model):
+class KindOfSport(models.Model):
     title = models.CharField(max_length=256)
     description = models.CharField(max_length=256)
     user = models.ManyToManyField(User)
@@ -12,7 +12,7 @@ class Kind_of_sport(models.Model):
 
 class Inventory(models.Model):
     title = models.CharField(max_length=256)
-    kind_of_sport = models.ForeignKey(Kind_of_sport, on_delete=models.CASCADE)
+    kindOfSport = models.ForeignKey(KindOfSport, on_delete=models.CASCADE)
     rating = models.IntegerField()
     user = models.ManyToManyField(User)
 

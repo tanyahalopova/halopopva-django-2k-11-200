@@ -1,0 +1,12 @@
+{% extends 'web/base.html' %}
+{% block content %}
+    <ul>
+        {% for inv in inventory %}
+            <li>
+                <b>{{ inv.title }}</b>
+                {{ inv.rating }}
+                <a href="{% url 'inventory_edit' inv.id %}">изменить</a>
+            </li>
+        {% endfor %}
+    </ul>
+{% endblock %}
