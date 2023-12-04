@@ -8,21 +8,24 @@
     <h1><a href="{% url 'main' %}">Social network for athletes</a></h1>
     <nav>
       <a href="{% url 'main' %}">Главная</a>
+
       {% if user.is_anonymous %}
         <div style="text-align: right">
             <a href="{% url 'registration' %}">Регистрация</a>
             <a href="{% url 'auth' %}">Авторизация</a>
         </div>
       {% else %}
+
         <a href="{% url  'inventory_add' %}">Добавить новый инвентарь</a>
-        <a href="{% url  'kind_of_sport' %}">Виды спорта</a>
+        <a href="{% url  'kind_of_sport_list' %}">Виды спорта</a>
+
         <div style="text-align: right">
             {% if not user.is_anonymous %}
                 <p>Вы авторизованы как <b>{{user.username}}</b></p>
             {% endif %}
             <a href="{% url 'logout' %}">Выход</a>
         </div>
-      {% endif %}
+        {% endif %}
 
     </nav>
     <hr>

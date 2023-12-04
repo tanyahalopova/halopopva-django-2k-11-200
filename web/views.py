@@ -1,14 +1,15 @@
 from django.contrib.auth import get_user_model, authenticate, login, logout
-from django.shortcuts import render, redirect
+from django.contrib.auth.decorators import login_required
+from django.shortcuts import render, redirect, get_object_or_404
 
 from web.forms import RegistrationForm, AuthForm, InventoryForm, KindOfSportForm
 from web.models import Inventory, KindOfSport
 
 User = get_user_model()
 
-
+@login_required
 def main_view(request):
-    inventory = Inventory.objects.all()
+    inventory = Inventory.objects.filter(user = request.user).order_by('-rating')
     return render(request, 'web/example.html', {
         'inventory': inventory
     })
@@ -51,30 +52,44 @@ def logout_view(request):
     return redirect('main')
 
 
+@login_required
 def inventory_edit_view(request, id=None):
-    inventory = Inventory.objects.get(id=id) if id is not None else None
-    form = InventoryForm(instance=inventory)
+    inventory = get_object_or_404(Inventory, user = request.user, id=id) if id is not None else None;
+    form = InventoryForm(instance=inventory, initial={"user": request.user})
     if request.method == "POST":
-        form = InventoryForm(data=request.POST, instance=inventory)
+        form = InventoryForm(data=request.POST, instance=inventory, initial={"user": request.user})
         if form.is_valid():
             form.save()
             return redirect("main")
     return render(request, 'web/inventory_form.html', {"form": form})
 
 
-def kind_of_sport_view(request):
-    kind_of_sport = KindOfSport.objects.all()
-    form = KindOfSportForm()
+@login_required
+def inventory_delete(request, id):
+    inventory = get_object_or_404(id=id, user=request.user)
+    inventory.delete()
+    return redirect("main")
+
+@login_required
+def kind_of_sport_list(request):
+    kind_of_sport = KindOfSport.objects.filter(user=request.user)
+    return render(request, 'web/kind_of_sport_list.html', {"kind_of_sport": kind_of_sport})
+
+
+@login_required
+def kind_of_sport_edit(request, id=None):
+    sport = get_object_or_404(KindOfSport, user=request.user, id=id) if id is not None else None
+    form = KindOfSportForm(instance=sport, initial={"user": request.user})
     if request.method == "POST":
-        form = KindOfSportForm(data=request.POST)
+        form = KindOfSportForm(data=request.POST, instance=sport, initial={"user": request.user})
         if form.is_valid():
             form.save()
-            return redirect('kind_of_sport')
-    return render(request, 'web/kind_of_sport_form.html', {"kind_of_sport": kind_of_sport, "form": form})
+            return redirect('kind_of_sport_list')
+    return render(request, 'web/kind_of_sport_form.html', {"form": form})
 
 
+@login_required
 def kind_of_sport_delete(request, id):
-    sport = KindOfSport.objects.get(id=id)
+    sport = get_object_or_404(id=id, user=request.user)
     sport.delete()
-    return redirect('kind_of_sport')
-
+    return redirect('kind_of_sport_list')

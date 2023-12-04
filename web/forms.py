@@ -7,6 +7,7 @@ User = get_user_model()
 
 
 class RegistrationForm(forms.ModelForm):
+    password = forms.CharField(widget=forms.PasswordInput)
     password2 = forms.CharField(widget=forms.PasswordInput)
 
     def clean(self):
@@ -26,12 +27,21 @@ class AuthForm(forms.Form):
 
 
 class InventoryForm(forms.ModelForm):
+    def save(self, commit=True):
+        form = super().save(commit)
+        form.user.add(self.initial.get('user'))
+        return form
     class Meta:
         model = Inventory
         fields = ('title', 'kindOfSport', 'rating')
 
 
 class KindOfSportForm(forms.ModelForm):
+    def save(self, commit=True):
+        form = super().save(commit)
+        form.user.add(self.initial.get('user'))
+        return form
+
     class Meta:
         model = KindOfSport
         fields = ('title', 'description')

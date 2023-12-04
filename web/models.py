@@ -3,14 +3,14 @@ from django.db import models
 
 User = get_user_model()
 
-<<<<<<< HEAD
-=======
 
->>>>>>> 2c52029d933bfa5b243ae1059a6ec5ac632324c7
 class KindOfSport(models.Model):
     title = models.CharField(max_length=256)
     description = models.CharField(max_length=256)
     user = models.ManyToManyField(User)
+
+    def __str__(self):
+        return self.title
 
 
 class Inventory(models.Model):

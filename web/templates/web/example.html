@@ -1,12 +1,15 @@
 {% extends 'web/base.html' %}
 {% block content %}
     <ul>
-        {% for inv in inventory %}
-            <li>
-                <b>{{ inv.title }}</b>
-                {{ inv.rating }}
-                <a href="{% url 'inventory_edit' inv.id %}">изменить</a>
-            </li>
-        {% endfor %}
+        {% if not user.is_anonymous %}
+            {% for inv in inventory %}
+                <li>
+                    <b>{{ inv.title }}</b>
+                        {{ inv.rating }}
+                        <a href="{% url 'inventory_edit' inv.id %}">изменить</a>
+                        <a href="{% url 'inventory_delete' inv.id %}">удалить</a>
+                </li>
+            {% endfor %}
+        {% endif %}
     </ul>
 {% endblock %}

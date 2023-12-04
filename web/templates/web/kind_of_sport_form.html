@@ -1,15 +1,7 @@
 {% extends 'web/base.html' %}
 {% block content %}
-    <h2>Виды спорта</h2>
-    <ul>
-        {% for sport in kind_of_sport %}
-            <li>{{ sport.title }}: {{ sport.description }}
-                <small><a href="{% url 'kind_of_sport_delete' sport.id %}">удалить</a></small>
-            </li>
-        {% endfor %}
-    </ul>
+    <h1>Добавить вид спорта</h1>
 
-    <b>Добавление спорта</b>
     <form action="", method="post">
         {% csrf_token %}
         {{form.as_p}}
