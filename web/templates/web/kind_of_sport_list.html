@@ -1,0 +1,16 @@
+{% extends 'web/base.html' %}
+{% block content %}
+    <h2>Виды спорта</h2>
+    <ul>
+        {% for sport in kind_of_sport %}
+            <li>{{ sport.title }}: {{ sport.description }}
+                <br>
+                <small><a href="{% url 'kind_of_sport_delete' sport.id %}">удалить</a></small>
+                <small><a href="{% url 'kind_of_sport_edit' sport.id %}">изменить</a></small>
+            </li>
+        {% endfor %}
+        <br>
+        <a href="{% url 'kind_of_sport_add'  %}">Добавить новый</a>
+    </ul>
+    </form>
+{% endblock %}
