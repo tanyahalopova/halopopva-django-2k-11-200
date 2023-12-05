@@ -1,8 +1,9 @@
 from django.contrib.auth import get_user_model, authenticate, login, logout
 from django.contrib.auth.decorators import login_required
+from django.core.paginator import Paginator
 from django.shortcuts import render, redirect, get_object_or_404
 
-from web.forms import RegistrationForm, AuthForm, InventoryForm, KindOfSportForm
+from web.forms import RegistrationForm, AuthForm, InventoryForm, KindOfSportForm, InventoryFilterForm
 from web.models import Inventory, KindOfSport
 
 User = get_user_model()
@@ -10,8 +11,22 @@ User = get_user_model()
 @login_required
 def main_view(request):
     inventory = Inventory.objects.filter(user = request.user).order_by('-rating')
+
+    filter_form = InventoryFilterForm(request.GET)
+    filter_form.is_valid()
+    filters = filter_form.cleaned_data
+
+    if filters['search']:
+        inventory = inventory.filter(title__icontains=filters['search'])
+
+    total_count = inventory.count()
+    page_number = request.GET.get("page", 1)
+    paginator = Paginator(inventory, per_page=10)
+
     return render(request, 'web/example.html', {
-        'inventory': inventory
+        'inventory': paginator.get_page(page_number),
+        'filter_form': filter_form,
+        'total_count': total_count
     })
 
 
@@ -66,7 +81,7 @@ def inventory_edit_view(request, id=None):
 
 @login_required
 def inventory_delete(request, id):
-    inventory = get_object_or_404(id=id, user=request.user)
+    inventory = get_object_or_404(Inventory, id=id, user=request.user)
     inventory.delete()
     return redirect("main")
 
@@ -90,6 +105,6 @@ def kind_of_sport_edit(request, id=None):
 
 @login_required
 def kind_of_sport_delete(request, id):
-    sport = get_object_or_404(id=id, user=request.user)
+    sport = get_object_or_404(KindOfSport, id=id, user=request.user)
     sport.delete()
     return redirect('kind_of_sport_list')

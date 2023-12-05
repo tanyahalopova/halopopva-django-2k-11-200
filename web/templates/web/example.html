@@ -2,14 +2,39 @@
 {% block content %}
     <ul>
         {% if not user.is_anonymous %}
+
+        <form action="">
+            <b>Фильтры</b>
+            {% for field in filter_form %}
+            {{ field.label }}
+            {{ field }}
+            {% endfor %}
+            <button>Найти</button>
+            <a href="?">Показать все</a>
+        </form>
+        <hr>
+
             {% for inv in inventory %}
                 <li>
                     <b>{{ inv.title }}</b>
-                        {{ inv.rating }}
+                        <small> ( рейтинг: {{ inv.rating }} ) </small>
+                        <br> Вид спорта: {{ inv.kindOfSport }}
                         <a href="{% url 'inventory_edit' inv.id %}">изменить</a>
                         <a href="{% url 'inventory_delete' inv.id %}">удалить</a>
                 </li>
             {% endfor %}
         {% endif %}
     </ul>
+    Всего {{ total_count}} записей. {{ inventory|length }} на этой странице.
+    <nav>
+        {% if inventory.has_previous %}
+            <a href="?page=1">в начало</a>
+            <a href="?page={{ inventory.previous_page_number }}"> предыдущая </a>
+        {% endif %}
+        страница {{ inventory.number }} из {{ inventory.paginator.num_pages}}
+        {% if inventory.has_next %}
+            <a href="?page={{ inventory.next_page_number }}">следующая </a>
+            <a href="?page={{ inventory.paginator.num_pages}}">в конец</a>
+        {% endif %}
+    </nav>
 {% endblock %}
