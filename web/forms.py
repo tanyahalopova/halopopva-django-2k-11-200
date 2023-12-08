@@ -1,5 +1,6 @@
 from django import forms
 from django.contrib.auth import get_user_model
+from django.forms import NullBooleanField
 
 from web.models import Inventory, KindOfSport
 
@@ -45,3 +46,10 @@ class KindOfSportForm(forms.ModelForm):
     class Meta:
         model = KindOfSport
         fields = ('title', 'description')
+
+class InventoryFilterForm(forms.Form):
+    search = forms.CharField(
+        label="Название:",
+        widget=forms.TextInput(attrs={"placeholder": "Поиск"}),
+        required=False
+    )

@@ -11,6 +11,9 @@ class KindOfSport(models.Model):
 
     def __str__(self):
         return self.title
+    class Meta:
+        verbose_name = 'вид спорта'
+        verbose_name_plural = 'виды спорта'
 
 
 class Inventory(models.Model):
